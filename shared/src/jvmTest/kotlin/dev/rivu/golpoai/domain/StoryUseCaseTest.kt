@@ -16,7 +16,7 @@ class StoryUseCaseTest : BehaviorSpec({
         val prompt = "An astronaut lost on Mars"
         val genre = "Sci-fi"
         val language = "English"
-        val expectedStory = "Once upon a time... on Mars"
+        val expectedStory = Result.success("Once upon a time... on Mars")
 
         coEvery { mockRepository.getStory(any()) } returns expectedStory
 

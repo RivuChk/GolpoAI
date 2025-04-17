@@ -7,8 +7,8 @@ import io.kotest.matchers.shouldBe
 class StoryRepositoryTest : BehaviorSpec({
 
     val fakeModel = object : GenerativeModel {
-        override suspend fun generateStory(prompt: String): String {
-            return "Fake story for: $prompt"
+        override suspend fun generateStory(prompt: String): Result<String> {
+            return Result.success("Fake story for: $prompt")
         }
     }
 
@@ -16,7 +16,7 @@ class StoryRepositoryTest : BehaviorSpec({
 
     Given("a prompt") {
         val prompt = "Haunted village"
-        val expected = "Fake story for: $prompt"
+        val expected = Result.success("Fake story for: $prompt")
 
         When("getStory is called") {
             val result = repository.getStory(prompt)

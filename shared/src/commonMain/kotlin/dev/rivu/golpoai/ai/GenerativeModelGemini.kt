@@ -1,17 +1,26 @@
 package dev.rivu.golpoai.ai
 
+import dev.rivu.golpoai.logging.Logger
 import dev.shreyaspatil.ai.client.generativeai.type.content
 import dev.shreyaspatil.ai.client.generativeai.GenerativeModel as GeminiApiGenerativeModel
 
 class GenerativeModelGemini(private val apiKey: String) : GenerativeModel {
-    private val model = GeminiApiGenerativeModel(
-        modelName = "googleai/gemini-2.0-flash",
-        apiKey = apiKey
-    )
+    private val model by lazy {
+        GeminiApiGenerativeModel(
+            modelName = "gemini-2.0-flash",
+            apiKey = apiKey
+        )
+    }
 
-    override suspend fun generateStory(prompt: String): String {
-        val input = content { text(prompt) }
-        val response = model.generateContent(input)
-        return response.text ?: "No story generated."
+    override suspend fun generateStory(prompt: String): Result<String> {
+        return try {
+            val input = content { text(prompt) }
+            val response = model.generateContent(input)
+            Logger.d("Generated story: $response")
+            Result.success(response.text ?: "No story generated.")
+        } catch (e: Exception) {
+            Logger.e("Error generating story", e)
+            Result.failure(e)
+        }
     }
 }

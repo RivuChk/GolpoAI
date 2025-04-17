@@ -18,7 +18,7 @@ buildkonfig {
         buildConfigField(
             Type.STRING,
             "GEMINI_API_KEY",
-            "\"${gradleLocalProperties(rootDir, providers).getProperty("GEMINI_API_KEY") ?: "MISSING_API_KEY"}\""
+            gradleLocalProperties(rootDir, providers).getProperty("GEMINI_API_KEY") ?: "MISSING_API_KEY"
         )
     }
 }
@@ -41,6 +41,7 @@ kotlin {
         commonMain.dependencies {
             implementation(libs.shreyasp.generativeai.gemini)
             implementation(libs.koin.core) // use latest stable
+            implementation(libs.touchlab.kermit)
         }
 
         val commonTest by getting {

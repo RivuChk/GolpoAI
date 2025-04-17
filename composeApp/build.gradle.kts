@@ -63,6 +63,12 @@ kotlin {
 
             // Koin integration
             implementation(libs.voyager.koin)
+
+            //koin
+            implementation(libs.koin.core) // use latest stable
+
+            //logging
+            implementation(libs.touchlab.kermit)
         }
     }
 }
