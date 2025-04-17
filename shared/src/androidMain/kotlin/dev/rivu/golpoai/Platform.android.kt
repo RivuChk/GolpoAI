@@ -1,5 +1,6 @@
 package dev.rivu.golpoai
 
+import android.content.Context
 import android.os.Build
 
 class AndroidPlatform : Platform {
@@ -7,3 +8,5 @@ class AndroidPlatform : Platform {
 }
 
 actual fun getPlatform(): Platform = AndroidPlatform()
+
+actual class ContextWrapper(val context: Context)

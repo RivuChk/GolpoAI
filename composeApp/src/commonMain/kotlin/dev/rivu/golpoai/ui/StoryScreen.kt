@@ -21,6 +21,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -32,7 +33,11 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import dev.rivu.golpoai.ContextWrapper
 import dev.rivu.golpoai.logging.Logger
+import dev.rivu.golpoai.platform.PlatformUtility
+import dev.rivu.golpoai.platform.getContext
+import dev.rivu.golpoai.platform.shareStory
 import dev.rivu.golpoai.presentation.StoryScreenModel
 import dev.rivu.golpoai.ui.components.GolpoAIHeaderLogo
 import dev.rivu.golpoai.ui.theme.GolpoAITheme
@@ -43,6 +48,8 @@ data class StoryScreen(val prompt: String, val genre: String) : Screen {
         val screenModel = koinScreenModel<StoryScreenModel>()
         val state by screenModel.state.collectAsState()
         val navigator = LocalNavigator.currentOrThrow
+
+        val contextWrapper = getContext()
 
         // Trigger story generation only once
         LaunchedEffect(Unit) {
@@ -80,6 +87,20 @@ data class StoryScreen(val prompt: String, val genre: String) : Screen {
                                 Icon(
                                     imageVector = Icons.Filled.Refresh,
                                     contentDescription = "Regenerate"
+                                )
+                            }
+                        }
+
+                        if (state.story != null) {
+                            IconButton(
+                                onClick = {
+                                    PlatformUtility.shareStory(contextWrapper = contextWrapper, story = state.story!!)
+                                },
+                                modifier = Modifier.align(Alignment.CenterEnd).padding(end = 48.dp)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Share,
+                                    contentDescription = "Share"
                                 )
                             }
                         }
