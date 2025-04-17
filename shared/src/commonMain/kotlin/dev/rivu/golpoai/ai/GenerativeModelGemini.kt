@@ -17,7 +17,9 @@ class GenerativeModelGemini(private val apiKey: String) : GenerativeModel {
             val input = content { text(prompt) }
             val response = model.generateContent(input)
             Logger.d("Generated story: $response")
-            Result.success(response.text ?: "No story generated.")
+            response.text?.let {
+                Result.success(it)
+            } ?: throw UnsupportedOperationException("No story generated.")
         } catch (e: Exception) {
             Logger.e("Error generating story", e)
             Result.failure(e)
