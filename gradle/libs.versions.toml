@@ -14,12 +14,24 @@ androidx-test-junit = "1.2.1"
 compose-multiplatform = "1.7.3"
 generativeaiGoogle = "0.9.0-1.1.0"
 junit = "4.13.2"
+koinCore = "3.5.3"
+kotestFrameworkEngine = "5.8.0"
+kotestAssertionsCore = "5.8.0"
 kotlin = "2.1.10"
 ktor = "3.1.1"
 logback = "1.5.17"
+mockkCommon = "1.13.10"
 voyagerVersion = "1.1.0-beta02"
 
 [libraries]
+koin-core = { module = "io.insert-koin:koin-core", version.ref = "koinCore" }
+kotest-assertions-core = { module = "io.kotest:kotest-assertions-core", version.ref = "kotestAssertionsCore" }
+kotest-framework-datatest = { module = "io.kotest:kotest-framework-datatest", version.ref = "kotestFrameworkEngine" }
+kotest-framework-api = { module = "io.kotest:kotest-framework-api", version.ref = "kotestFrameworkEngine" }
+kotest-framework-engine = { module = "io.kotest:kotest-framework-engine", version.ref = "kotestFrameworkEngine" }
+kotest-runner-junit5 = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotestFrameworkEngine" }
+mockk = { module = "io.mockk:mockk", version.ref = "mockkCommon" }
+mockk-common = { module = "io.mockk:mockk-common", version.ref = "mockkCommon" }
 shreyasp-generativeai-gemini = { module = "dev.shreyaspatil.generativeai:generativeai-google", version.ref = "generativeaiGoogle" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 kotlin-test-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
