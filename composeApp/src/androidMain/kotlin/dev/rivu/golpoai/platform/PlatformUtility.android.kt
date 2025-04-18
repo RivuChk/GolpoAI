@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import dev.rivu.golpoai.ContextWrapper
+import java.util.UUID
 
 actual fun PlatformUtility.shareStory(contextWrapper: ContextWrapper, story: String) {
     val context = contextWrapper.context
@@ -18,6 +19,9 @@ actual fun PlatformUtility.shareStory(contextWrapper: ContextWrapper, story: Str
 
 
 @Composable
-actual fun getContext(): ContextWrapper {
+actual fun PlatformUtility.getContext(): ContextWrapper {
     return ContextWrapper(LocalContext.current)
 }
+
+
+actual fun PlatformUtility.generateUUID(): String = UUID.randomUUID().toString()

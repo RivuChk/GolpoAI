@@ -9,5 +9,7 @@ object PlatformUtility {
 
 expect fun PlatformUtility.shareStory(contextWrapper: ContextWrapper, story: String)
 
+expect fun PlatformUtility.generateUUID(): String
+
 @Composable
-expect fun getContext(): ContextWrapper
+expect fun PlatformUtility.getContext(): ContextWrapper

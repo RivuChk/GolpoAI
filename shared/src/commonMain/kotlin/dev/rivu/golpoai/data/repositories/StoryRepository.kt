@@ -1,7 +1,6 @@
-package dev.rivu.golpoai.data
+package dev.rivu.golpoai.data.repositories
 
 import dev.rivu.golpoai.ai.GenerativeModel
-
 
 class StoryRepository(private val model: GenerativeModel) {
 

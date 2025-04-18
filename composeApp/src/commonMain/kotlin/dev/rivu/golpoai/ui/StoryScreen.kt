@@ -19,6 +19,7 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Share
@@ -34,22 +35,28 @@ import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import dev.rivu.golpoai.ContextWrapper
+import dev.rivu.golpoai.data.models.SavedStory
 import dev.rivu.golpoai.logging.Logger
 import dev.rivu.golpoai.platform.PlatformUtility
+import dev.rivu.golpoai.platform.generateUUID
 import dev.rivu.golpoai.platform.getContext
 import dev.rivu.golpoai.platform.shareStory
 import dev.rivu.golpoai.presentation.StoryScreenModel
 import dev.rivu.golpoai.ui.components.GolpoAIHeaderLogo
+import dev.rivu.golpoai.ui.components.GolpoButton
 import dev.rivu.golpoai.ui.theme.GolpoAITheme
+import kotlinx.datetime.Clock
+import kotlin.time.ExperimentalTime
 
 data class StoryScreen(val prompt: String, val genre: String) : Screen {
+    @OptIn(ExperimentalTime::class)
     @Composable
     override fun Content() {
         val screenModel = koinScreenModel<StoryScreenModel>()
         val state by screenModel.state.collectAsState()
         val navigator = LocalNavigator.currentOrThrow
 
-        val contextWrapper = getContext()
+        val contextWrapper = PlatformUtility.getContext()
 
         // Trigger story generation only once
         LaunchedEffect(Unit) {
@@ -105,7 +112,22 @@ data class StoryScreen(val prompt: String, val genre: String) : Screen {
                             }
                         }
                     }
-
+                    if (state.story != null && !state.saved) {
+                        GolpoButton(
+                            text = "Save Story",
+                            icon = Icons.Filled.AddCircle,
+                            onClick = {
+                                val id = PlatformUtility.generateUUID()
+                                val timestamp = Clock.System.now().toEpochMilliseconds()
+                                screenModel.saveStory(
+                                    SavedStory(id, prompt, genre, state.story!!, timestamp)
+                                )
+                            },
+                            modifier = Modifier
+                                .align(Alignment.CenterHorizontally)
+                                .padding(vertical = 8.dp)
+                        )
+                    }
                     Column(
                         modifier = Modifier.verticalScroll(rememberScrollState())
                     ) {

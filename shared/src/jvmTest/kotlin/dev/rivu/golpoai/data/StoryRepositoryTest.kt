@@ -1,6 +1,7 @@
 package dev.rivu.golpoai.data
 
 import dev.rivu.golpoai.ai.GenerativeModel
+import dev.rivu.golpoai.data.repositories.StoryRepository
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 

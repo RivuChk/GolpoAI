@@ -9,6 +9,15 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
     id("com.codingfeline.buildkonfig")
+    id("app.cash.sqldelight") version "2.0.2"
+}
+
+sqldelight {
+    databases {
+        create("GolpoDatabase") {
+            packageName.set("dev.rivu.golpoai.db")
+        }
+    }
 }
 
 buildkonfig {
@@ -25,10 +34,10 @@ buildkonfig {
 
 kotlin {
     androidTarget {
-        @OptIn(ExperimentalKotlinGradlePluginApi::class)
-        compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_11)
+        compilations.all {
+            kotlinOptions.jvmTarget = JvmTarget.JVM_17.target
         }
+
     }
 
     iosX64()
@@ -42,6 +51,9 @@ kotlin {
             implementation(libs.shreyasp.generativeai.gemini)
             implementation(libs.koin.core) // use latest stable
             implementation(libs.touchlab.kermit)
+
+            implementation(libs.sqldelight.runtime)
+            implementation(libs.sqldelight.coroutines.extensions)
         }
 
         val commonTest by getting {
@@ -64,6 +76,17 @@ kotlin {
                 implementation(libs.kotest.framework.datatest)
             }
         }
+
+        androidMain.dependencies {
+            implementation(libs.koin.android) // use latest stable
+            implementation(libs.sqldelight.android.driver)
+
+        }
+
+        iosMain.dependencies {
+            implementation(libs.sqldelight.native.driver)
+        }
+
     }
 }
 
@@ -71,8 +94,8 @@ android {
     namespace = "dev.rivu.golpoai.shared"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     defaultConfig {
         minSdk = libs.versions.android.minSdk.get().toInt()

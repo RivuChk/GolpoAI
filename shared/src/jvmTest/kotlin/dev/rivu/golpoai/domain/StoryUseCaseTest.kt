@@ -1,6 +1,6 @@
 package dev.rivu.golpoai.domain
 
-import dev.rivu.golpoai.data.StoryRepository
+import dev.rivu.golpoai.data.repositories.StoryRepository
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.coEvery

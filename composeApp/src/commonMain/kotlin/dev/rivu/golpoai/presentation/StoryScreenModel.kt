@@ -3,20 +3,14 @@ package dev.rivu.golpoai.presentation
 import cafe.adriel.voyager.core.model.StateScreenModel
 import dev.rivu.golpoai.domain.StoryUseCase
 import cafe.adriel.voyager.core.model.screenModelScope
+import dev.rivu.golpoai.data.models.SavedStory
+import dev.rivu.golpoai.domain.SaveStoryUseCase
 import dev.rivu.golpoai.logging.Logger
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
-data class StoryUiState(
-    val prompt: String = "",
-    val genre: String = "",
-    val story: String? = null,
-    val loading: Boolean = false,
-    val error: String? = null
-)
-
 class StoryScreenModel(
-    private val useCase: StoryUseCase
+    private val useCase: StoryUseCase,
+    private val saveStoryUseCase: SaveStoryUseCase
 ) : StateScreenModel<StoryUiState>(StoryUiState()) {
 
     fun generateStory(prompt: String, genre: String, language: String) {
@@ -39,6 +33,13 @@ class StoryScreenModel(
                     loading = false
                 )
             }
+        }
+    }
+
+    fun saveStory(story: SavedStory) {
+        screenModelScope.launch {
+            saveStoryUseCase.save(story)
+            mutableState.value = mutableState.value.copy(saved = true)
         }
     }
 }

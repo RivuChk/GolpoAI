@@ -33,6 +33,7 @@ kotlin {
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
+            implementation(libs.koin.android) // use latest stable
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -69,6 +70,9 @@ kotlin {
 
             //logging
             implementation(libs.touchlab.kermit)
+
+            //date-time
+            implementation(libs.kotlinx.datetime)
         }
     }
 }

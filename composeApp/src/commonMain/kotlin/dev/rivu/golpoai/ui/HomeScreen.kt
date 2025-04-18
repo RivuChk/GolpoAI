@@ -49,6 +49,16 @@ object HomeScreen : Screen {
                     GolpoButton(text = "Generate Story") {
                         navigator.push(StoryScreen(prompt, genre))
                     }
+                    Spacer(modifier = Modifier.height(12.dp))
+                    GolpoButton(
+                        text = "View Past Stories",
+                        onClick = {
+                            navigator.push(HistoryScreen)
+                        },
+                        modifier = Modifier
+                            .align(Alignment.CenterHorizontally)
+                            .padding(top = 8.dp),
+                    )
                 }
             }
         }

@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import dev.rivu.golpoai.ContextWrapper
 import platform.UIKit.UIActivityViewController
 import platform.UIKit.UIApplication
+import platform.Foundation.NSUUID
 
 
 actual fun PlatformUtility.shareStory(contextWrapper: ContextWrapper, story: String) {
@@ -17,6 +18,8 @@ actual fun PlatformUtility.shareStory(contextWrapper: ContextWrapper, story: Str
 }
 
 @Composable
-actual fun getContext(): ContextWrapper {
+actual fun PlatformUtility.getContext(): ContextWrapper {
     return ContextWrapper()
 }
+
+actual fun PlatformUtility.generateUUID(): String = NSUUID().UUIDString()

@@ -1,0 +1,14 @@
+CREATE TABLE story_history (
+    id TEXT NOT NULL PRIMARY KEY,
+    prompt TEXT NOT NULL,
+    genre TEXT NOT NULL,
+    story TEXT NOT NULL,
+    created_at INTEGER NOT NULL
+);
+
+selectAll:
+SELECT * FROM story_history ORDER BY created_at DESC;
+
+insertStory:
+INSERT INTO story_history(id, prompt, genre, story, created_at)
+VALUES (?, ?, ?, ?, ?);
