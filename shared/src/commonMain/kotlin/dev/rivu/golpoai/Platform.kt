@@ -2,6 +2,12 @@ package dev.rivu.golpoai
 
 interface Platform {
     val name: String
+
+    val platform: PlatformEnum
+}
+
+public enum class PlatformEnum {
+    Android, iOS, JVM
 }
 
 expect fun getPlatform(): Platform

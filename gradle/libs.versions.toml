@@ -19,17 +19,24 @@ koinCore = "3.5.3"
 kotestFrameworkEngine = "5.8.0"
 kotestAssertionsCore = "5.8.0"
 kotlin = "2.1.10"
+kotlinxCoroutinesCore = "1.10.2"
 kotlinxDatetime = "0.5.0"
 kotlinxUuidCore = "0.0.5"
 ktor = "3.1.1"
 logback = "1.5.17"
 mockkCommon = "1.13.10"
+multiplatformSettingsNoArg = "1.1.1"
+solutionsGenai = "0.10.23"
 sqldelight = "2.0.2"
 voyagerVersion = "1.1.0-beta02"
 
 [libraries]
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutinesCore" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetime" }
 kotlinx-uuid-core = { module = "org.jetbrains.kotlinx:kotlinx-uuid-core", version.ref = "kotlinxUuidCore" }
+multiplatform-settings-coroutines = { module = "com.russhwolf:multiplatform-settings-coroutines", version.ref = "multiplatformSettingsNoArg" }
+multiplatform-settings-no-arg = { module = "com.russhwolf:multiplatform-settings-no-arg", version.ref = "multiplatformSettingsNoArg" }
+solutions-genai = { module = "com.google.mediapipe:tasks-genai", version.ref = "solutionsGenai" }
 sqldelight-android-driver = { module = "app.cash.sqldelight:android-driver", version.ref = "sqldelight" }
 sqldelight-native-driver = { module = "app.cash.sqldelight:native-driver", version.ref = "sqldelight" }
 sqldelight-coroutines-extensions = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqldelight" }
@@ -76,3 +83,4 @@ composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "k
 kotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 ktor = { id = "io.ktor.plugin", version.ref = "ktor" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+kotlinCocoapods = { id = "org.jetbrains.kotlin.native.cocoapods", version.ref = "kotlin" }

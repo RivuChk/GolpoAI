@@ -73,6 +73,10 @@ kotlin {
 
             //date-time
             implementation(libs.kotlinx.datetime)
+
+            //RussWolf - Settings
+            implementation(libs.multiplatform.settings.no.arg)
+            implementation(libs.multiplatform.settings.coroutines)
         }
     }
 }

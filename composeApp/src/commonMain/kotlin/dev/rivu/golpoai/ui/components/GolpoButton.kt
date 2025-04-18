@@ -18,12 +18,14 @@ fun GolpoButton(
     modifier: Modifier = Modifier,
     icon: ImageVector? = null,
     bgColor: androidx.compose.ui.graphics.Color = KotlinRed,
+    enabled: Boolean = true,
     onClick: () -> Unit
 ) {
     Button(
         onClick = onClick,
         modifier = modifier,
         colors = ButtonDefaults.buttonColors(backgroundColor = bgColor),
+        enabled = enabled
     ) {
         if (icon != null) {
             Icon(

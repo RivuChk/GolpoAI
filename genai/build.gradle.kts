@@ -1,33 +1,24 @@
-import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
-import org.gradle.declarative.dsl.schema.FqName.Empty.packageName
-import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import com.codingfeline.buildkonfig.compiler.FieldSpec.Type
+import org.gradle.declarative.dsl.schema.FqName.Empty.packageName
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.konan.target.KonanTarget
 
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
     id("com.codingfeline.buildkonfig")
-    id("app.cash.sqldelight") version "2.0.2"
 }
 
-sqldelight {
-    databases {
-        create("GolpoDatabase") {
-            packageName.set("dev.rivu.golpoai.db")
-        }
-    }
-}
 
 buildkonfig {
-    packageName = "dev.rivu.golpoai.config"
+    packageName = "dev.rivu.genai.kmpllminterferencelib.config"
 
     defaultConfigs {
         buildConfigField(
-            Type.STRING,
-            "GEMINI_API_KEY",
-            gradleLocalProperties(rootDir, providers).getProperty("GEMINI_API_KEY") ?: "MISSING_API_KEY"
+            Type.BOOLEAN,
+            "buildConfigWorking",
+            "true"
         )
     }
 }
@@ -48,15 +39,11 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            implementation(project(":genai"))
-            implementation(libs.shreyasp.generativeai.gemini)
             implementation(libs.koin.core) // use latest stable
             implementation(libs.touchlab.kermit)
 
-            implementation(libs.sqldelight.runtime)
-            implementation(libs.sqldelight.coroutines.extensions)
-
             implementation(libs.kotlinx.coroutines.core)
+
         }
 
         val commonTest by getting {
@@ -81,20 +68,22 @@ kotlin {
         }
 
         androidMain.dependencies {
+            implementation(libs.solutions.genai)
             implementation(libs.koin.android) // use latest stable
-            implementation(libs.sqldelight.android.driver)
 
         }
 
         iosMain.dependencies {
-            implementation(libs.sqldelight.native.driver)
+
         }
 
     }
+
+
 }
 
 android {
-    namespace = "dev.rivu.golpoai.shared"
+    namespace = "dev.rivu.genai.kmpllminterferencelib"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
@@ -111,4 +100,5 @@ tasks.named<Test>("jvmTest") {
         events("passed", "skipped", "failed")
     }
 }
+
 

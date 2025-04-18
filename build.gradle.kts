@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.kotlinJvm) apply false
     alias(libs.plugins.kotlinMultiplatform) apply false
     id("com.codingfeline.buildkonfig") version "0.13.3" apply false
+    alias(libs.plugins.kotlinCocoapods) apply false
 }
 
 tasks.withType<Test> {

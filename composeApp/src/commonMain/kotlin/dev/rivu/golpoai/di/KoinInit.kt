@@ -10,7 +10,8 @@ fun initKoin(appDeclaration: KoinAppDeclaration = {}) = startKoin {
         sharedModule,
         composeAppModule,
         databaseModule,
-        sqlDriverModule
+        sqlDriverModule,
+        TextGeneratorModule
     )
 }
 
