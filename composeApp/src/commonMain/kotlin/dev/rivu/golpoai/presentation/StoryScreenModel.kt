@@ -21,7 +21,8 @@ class StoryScreenModel(
                 mutableState.value = if (story.isSuccess) {
                     mutableState.value.copy(
                         story = story.getOrThrow(),
-                        loading = false
+                        loading = false,
+                        saved = false
                     )
                 } else {
                     throw story.exceptionOrNull() ?: Exception("Unknown error")
@@ -30,7 +31,8 @@ class StoryScreenModel(
                 Logger.e("Error generating story", e)
                 mutableState.value = mutableState.value.copy(
                     error = e.message ?: "Unknown error",
-                    loading = false
+                    loading = false,
+                    saved = false
                 )
             }
         }

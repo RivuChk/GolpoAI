@@ -59,6 +59,10 @@ object HistoryScreen : Screen {
                     Text("Past Stories", style = MaterialTheme.typography.h4)
                     Spacer(modifier = Modifier.height(16.dp))
 
+                    if (state.stories.isEmpty()) {
+                        Text("No stories found.", modifier = Modifier.align(Alignment.CenterHorizontally))
+                    }
+
                     LazyColumn {
                         items(state.stories) { story ->
                             Card(
