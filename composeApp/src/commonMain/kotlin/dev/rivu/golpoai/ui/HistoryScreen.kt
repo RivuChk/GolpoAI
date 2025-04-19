@@ -18,6 +18,7 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -29,8 +30,11 @@ import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import dev.rivu.golpoai.platform.PlatformUtility
+import dev.rivu.golpoai.platform.shareStory
 import dev.rivu.golpoai.presentation.HistoryScreenModel
 import dev.rivu.golpoai.ui.components.GolpoAIHeaderLogo
+import dev.rivu.golpoai.ui.components.StoryHeaderBar
 import dev.rivu.golpoai.ui.theme.GolpoAITheme
 
 object HistoryScreen : Screen {
@@ -42,45 +46,38 @@ object HistoryScreen : Screen {
 
         GolpoAITheme {
             Surface(modifier = Modifier.fillMaxSize()) {
-                Column(modifier = Modifier.padding(16.dp)) {
-                    Box(modifier= Modifier.fillMaxWidth()) {
-                        IconButton(
-                            onClick = { navigator.pop() },
-                            modifier = Modifier.align(Alignment.CenterStart)
-                        ) {
-                            Icon(
-                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                                contentDescription = "Back"
-                            )
+                Column {
+                    StoryHeaderBar(
+                        onBack = { navigator.pop() },
+                    )
+                    Column(modifier = Modifier.padding(16.dp)) {
+
+                        Text("Past Stories", style = MaterialTheme.typography.h4)
+                        Spacer(modifier = Modifier.height(16.dp))
+
+                        if (state.stories.isEmpty()) {
+                            Text("No stories found.", modifier = Modifier.align(Alignment.CenterHorizontally))
                         }
 
-                        GolpoAIHeaderLogo(modifier = Modifier.align(Alignment.Center))
-                    }
-                    Text("Past Stories", style = MaterialTheme.typography.h4)
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    if (state.stories.isEmpty()) {
-                        Text("No stories found.", modifier = Modifier.align(Alignment.CenterHorizontally))
-                    }
-
-                    LazyColumn {
-                        items(state.stories) { story ->
-                            Card(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(vertical = 4.dp)
-                                    .clickable {
-                                        navigator.push(StoryDetailScreen(story))
+                        LazyColumn {
+                            items(state.stories) { story ->
+                                Card(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(vertical = 4.dp)
+                                        .clickable {
+                                            navigator.push(StoryDetailScreen(story))
+                                        }
+                                ) {
+                                    Column(modifier = Modifier.padding(12.dp)) {
+                                        Text("Prompt: ${story.prompt}", style = MaterialTheme.typography.subtitle1)
+                                        Text("Genre: ${story.genre}", style = MaterialTheme.typography.body2)
+                                        Spacer(modifier = Modifier.height(4.dp))
+                                        Text(
+                                            story.story.take(200) + "...",
+                                            style = MaterialTheme.typography.body2
+                                        )
                                     }
-                            ) {
-                                Column(modifier = Modifier.padding(12.dp)) {
-                                    Text("Prompt: ${story.prompt}", style = MaterialTheme.typography.subtitle1)
-                                    Text("Genre: ${story.genre}", style = MaterialTheme.typography.body2)
-                                    Spacer(modifier = Modifier.height(4.dp))
-                                    Text(
-                                        story.story.take(200) + "...",
-                                        style = MaterialTheme.typography.body2
-                                    )
                                 }
                             }
                         }

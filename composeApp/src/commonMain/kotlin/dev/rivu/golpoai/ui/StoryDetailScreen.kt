@@ -34,7 +34,7 @@ data class StoryDetailScreen(val story: SavedStory) : Screen {
 
         GolpoAITheme {
             Surface(modifier = Modifier.fillMaxSize()) {
-                Column(modifier = Modifier.padding(16.dp)) {
+                Column {
                     StoryHeaderBar(
                         onBack = { navigator.pop() },
                         actions = {
@@ -51,7 +51,7 @@ data class StoryDetailScreen(val story: SavedStory) : Screen {
                         prompt = story.prompt,
                         genre = story.genre,
                         story = story.story,
-                        modifier = Modifier.fillMaxSize()
+                        modifier = Modifier.padding(16.dp).fillMaxSize()
                     )
                 }
             }

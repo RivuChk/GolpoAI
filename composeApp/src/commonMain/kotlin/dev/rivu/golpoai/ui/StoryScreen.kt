@@ -51,10 +51,7 @@ data class StoryScreen(val prompt: String, val genre: String) : Screen {
 
         GolpoAITheme {
             Surface(modifier = Modifier.Companion.fillMaxSize()) {
-                Column(
-                    modifier = Modifier.Companion
-                        .padding(16.dp)
-                ) {
+                Column {
                     StoryHeaderBar(
                         onBack = { navigator.pop() },
                         actions = {
@@ -75,31 +72,37 @@ data class StoryScreen(val prompt: String, val genre: String) : Screen {
                             }
                         }
                     )
-                    if (state.story != null && !state.saved) {
-                        GolpoButton(
-                            text = "Save Story",
-                            icon = Icons.Filled.AddCircle,
-                            onClick = {
-                                val id = PlatformUtility.generateUUID()
-                                val timestamp = Clock.System.now().toEpochMilliseconds()
-                                screenModel.saveStory(
-                                    SavedStory(id, prompt, genre, state.story!!, timestamp)
-                                )
-                            },
-                            modifier = Modifier
-                                .align(Alignment.CenterHorizontally)
-                                .padding(vertical = 8.dp)
+                    Column(
+                        modifier = Modifier.Companion
+                            .padding(16.dp)
+                    ) {
+
+                        if (state.story != null && !state.saved) {
+                            GolpoButton(
+                                text = "Save Story",
+                                icon = Icons.Filled.AddCircle,
+                                onClick = {
+                                    val id = PlatformUtility.generateUUID()
+                                    val timestamp = Clock.System.now().toEpochMilliseconds()
+                                    screenModel.saveStory(
+                                        SavedStory(id, prompt, genre, state.story!!, timestamp)
+                                    )
+                                },
+                                modifier = Modifier
+                                    .align(Alignment.CenterHorizontally)
+                                    .padding(vertical = 8.dp)
+                            )
+                        }
+                        StoryContentSection(
+                            title = "Your Story",
+                            prompt = prompt,
+                            genre = genre,
+                            story = state.story,
+                            error = state.error,
+                            loading = state.loading,
+                            modifier = Modifier.fillMaxSize()
                         )
                     }
-                    StoryContentSection(
-                        title = "Your Story",
-                        prompt = prompt,
-                        genre = genre,
-                        story = state.story,
-                        error = state.error,
-                        loading = state.loading,
-                        modifier = Modifier.fillMaxSize()
-                    )
                 }
             }
         }
