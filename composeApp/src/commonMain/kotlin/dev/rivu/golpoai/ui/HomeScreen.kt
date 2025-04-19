@@ -76,7 +76,7 @@ object HomeScreen : Screen {
 
                     if (getPlatform().platform == PlatformEnum.Android) {
                         // Platform-specific
-                        LocalGenerationToggle(isEnabled = useLocal.value) {
+                        LocalGenerationToggle(isEnabled = useLocal.value, isReady = isOfflineModelReady.value) {
                             screenModel.setUseLocalGeneration(it)
                         }
                     }

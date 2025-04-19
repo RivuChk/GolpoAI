@@ -10,15 +10,20 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import java.io.File
 import java.net.URL
+import kotlinx.coroutines.SupervisorJob
 
 actual class TextGenerator(private val context: Context) {
+
+    val job = SupervisorJob()
+    val coroutineScope = CoroutineScope(Dispatchers.IO + job)
 
     private val modelUrl = "https://s3.us-east-2.amazonaws.com/rivu.dev/gemma3-1b-it-int4.task"
     private val modelFileName = "gemma3-1b-it-int4.task"
     private val modelFile: File
         get() = File(context.filesDir, modelFileName)
 
-    private val _isReady = MutableStateFlow(false)
+    private val _isReady:MutableStateFlow<Boolean> = MutableStateFlow(false)
+    private val _isDownloaded = MutableStateFlow(false)
     actual val isReady: StateFlow<Boolean> = _isReady
 
     private val llmInference: LlmInference by lazy {
@@ -31,12 +36,30 @@ actual class TextGenerator(private val context: Context) {
     }
 
     init {
-        CoroutineScope(Dispatchers.IO).launch {
+        coroutineScope.launch {
             if (!modelFile.exists()) {
                 downloadModel()
             }
-            _isReady.value = modelFile.exists()
+            _isDownloaded.value = modelFile.exists()
+
+            _isDownloaded.collect {
+                if (it) {
+                    _isReady.value = try {
+                        llmInference.generateResponse("are you working yet?").isNotBlank()
+                    } catch (e: Exception) {
+                        Logger.e("Error initializing model", e)
+                        false
+                    }
+                    Logger.d(
+                        "Model ready: ${_isReady.value}"
+                    )
+                } else {
+                    _isReady.value = false
+                }
+            }
         }
+
+
     }
 
     private fun downloadModel() {
@@ -48,11 +71,13 @@ actual class TextGenerator(private val context: Context) {
                 }
             }
             if (modelFile.exists()) {
+                _isDownloaded.value = true
                 Logger.d("Model downloaded")
             } else {
                 Logger.e("Model download failed")
             }
         }.onFailure {
+            _isDownloaded.value = false
             Logger.e("Error downloading model", it)
             it.printStackTrace()
         }

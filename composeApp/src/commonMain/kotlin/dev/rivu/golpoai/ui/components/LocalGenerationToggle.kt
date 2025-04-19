@@ -13,15 +13,16 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun LocalGenerationToggle(
     isEnabled: Boolean,
+    isReady: Boolean,
     onToggle: (Boolean) -> Unit
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Text("Use Local Generation", modifier = Modifier.weight(1f))
-        Switch(checked = isEnabled, onCheckedChange = onToggle)
+        Switch(checked = isEnabled, onCheckedChange = onToggle, enabled = isReady || isEnabled)
     }
 }
