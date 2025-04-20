@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
-import androidx.compose.material.Surface
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Refresh
@@ -30,9 +29,8 @@ import dev.rivu.golpoai.presentation.StoryScreenModel
 import dev.rivu.golpoai.ui.components.GolpoButton
 import dev.rivu.golpoai.ui.components.StoryContentSection
 import dev.rivu.golpoai.ui.components.StoryHeaderBar
-import dev.rivu.golpoai.ui.theme.GolpoAITheme
-import kotlinx.datetime.Clock
 import kotlin.time.ExperimentalTime
+import kotlinx.datetime.Clock
 
 data class StoryScreen(val prompt: String, val genre: String) : Screen {
     @OptIn(ExperimentalTime::class)
@@ -49,62 +47,60 @@ data class StoryScreen(val prompt: String, val genre: String) : Screen {
             screenModel.generateStory(prompt, genre, "English")
         }
 
-        GolpoAITheme {
-            Surface(modifier = Modifier.Companion.fillMaxSize()) {
-                Column {
-                    StoryHeaderBar(
-                        onBack = { navigator.pop() },
-                        actions = {
-                            if (state.story != null) {
-                                IconButton(onClick = {
-                                    PlatformUtility.shareStory(contextWrapper, state.story!!)
-                                }) {
-                                    Icon(Icons.Default.Share, contentDescription = "Share")
-                                }
-                            }
 
-                            if (state.story != null || state.error != null) {
-                                IconButton(onClick = {
-                                    screenModel.generateStory(prompt, genre, "English")
-                                }) {
-                                    Icon(Icons.Filled.Refresh, contentDescription = "Regenerate")
-                                }
-                            }
+        Column {
+            StoryHeaderBar(
+                onBack = { navigator.pop() },
+                actions = {
+                    if (state.story != null) {
+                        IconButton(onClick = {
+                            PlatformUtility.shareStory(contextWrapper, state.story!!)
+                        }) {
+                            Icon(Icons.Default.Share, contentDescription = "Share")
                         }
-                    )
-                    Column(
-                        modifier = Modifier.Companion
-                            .padding(16.dp)
-                    ) {
+                    }
 
-                        if (state.story != null && !state.saved) {
-                            GolpoButton(
-                                text = "Save Story",
-                                icon = Icons.Filled.AddCircle,
-                                onClick = {
-                                    val id = PlatformUtility.generateUUID()
-                                    val timestamp = Clock.System.now().toEpochMilliseconds()
-                                    screenModel.saveStory(
-                                        SavedStory(id, prompt, genre, state.story!!, timestamp)
-                                    )
-                                },
-                                modifier = Modifier
-                                    .align(Alignment.CenterHorizontally)
-                                    .padding(vertical = 8.dp)
-                            )
+                    if (state.story != null || state.error != null) {
+                        IconButton(onClick = {
+                            screenModel.generateStory(prompt, genre, "English")
+                        }) {
+                            Icon(Icons.Filled.Refresh, contentDescription = "Regenerate")
                         }
-                        StoryContentSection(
-                            title = "Your Story",
-                            prompt = prompt,
-                            genre = genre,
-                            story = state.story,
-                            error = state.error,
-                            loading = state.loading,
-                            modifier = Modifier.fillMaxSize()
-                        )
                     }
                 }
+            )
+            Column(
+                modifier = Modifier.Companion
+                    .padding(16.dp)
+            ) {
+
+                if (state.story != null && !state.saved) {
+                    GolpoButton(
+                        text = "Save Story",
+                        icon = Icons.Filled.AddCircle,
+                        onClick = {
+                            val id = PlatformUtility.generateUUID()
+                            val timestamp = Clock.System.now().toEpochMilliseconds()
+                            screenModel.saveStory(
+                                SavedStory(id, prompt, genre, state.story!!, timestamp)
+                            )
+                        },
+                        modifier = Modifier
+                            .align(Alignment.CenterHorizontally)
+                            .padding(vertical = 8.dp)
+                    )
+                }
+                StoryContentSection(
+                    title = "Your Story",
+                    prompt = prompt,
+                    genre = genre,
+                    story = state.story,
+                    error = state.error,
+                    loading = state.loading,
+                    modifier = Modifier.fillMaxSize()
+                )
             }
         }
+
     }
 }
