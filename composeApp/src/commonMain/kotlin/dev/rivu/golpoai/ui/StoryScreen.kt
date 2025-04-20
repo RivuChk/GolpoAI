@@ -1,5 +1,10 @@
 package dev.rivu.golpoai.ui
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -8,8 +13,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.BottomAppBar
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
@@ -27,19 +32,17 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import dev.rivu.golpoai.data.models.StoryMetadata
 import dev.rivu.golpoai.platform.PlatformUtility
 import dev.rivu.golpoai.platform.getContext
 import dev.rivu.golpoai.platform.shareStory
 import dev.rivu.golpoai.presentation.StoryScreenModel
 import dev.rivu.golpoai.ui.components.GolpoButton
-import dev.rivu.golpoai.ui.components.StoryContentSection
+import dev.rivu.golpoai.ui.components.StoryContent
 import dev.rivu.golpoai.ui.components.StoryHeaderBar
 import dev.rivu.golpoai.ui.components.StoryMetadata
 import kotlin.time.ExperimentalTime
@@ -127,26 +130,35 @@ data class StoryScreen(val prompt: String, val genre: String) : Screen {
                 }
 
                 state.story != null -> {
-                    LazyColumn(
-                        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
-                    ) {
-                        item {
-                            StoryMetadata(
-                                metadata = state.story!!.storyMetadata, // assuming this is a formatted string
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(bottom = 12.dp)
-                            )
-                        }
+                    val scrollState = rememberScrollState()
 
-                        item {
-                            StoryContentSection(
-                                story = state.story!!.storyText,
+                    val showMetadata by remember {
+                        derivedStateOf { scrollState.value <= 20 }
+                    }
+
+                    Column(
+                        modifier = Modifier.fillMaxSize().padding(PaddingValues(horizontal = 16.dp, vertical = 12.dp))
+                    ) {
+                        AnimatedVisibility(
+                            visible = showMetadata,
+                            enter = fadeIn() + slideInVertically(),
+                            exit = fadeOut() + slideOutVertically()
+                        ) {
+                            StoryMetadata(
+                                metadata = state.story!!.storyMetadata,
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(bottom = 12.dp)
                             )
                         }
+                        StoryContent(
+                            story = state.story!!.storyText,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(bottom = 12.dp)
+                                .weight(1f),
+                            scrollState = scrollState
+                        )
                     }
                 }
 
