@@ -1,10 +1,8 @@
 package dev.rivu.golpoai.data.datastore
 
-import app.cash.sqldelight.Query
 import dev.rivu.golpoai.db.GolpoDatabaseQueries
 import dev.rivu.golpoai.db.Story_history
 import io.kotest.core.spec.style.BehaviorSpec
-import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.test.runTest
@@ -16,7 +14,15 @@ class SqlDelightStoryDataStoreTest : BehaviorSpec({
         val dataStore = SqlDelightStoryDataStore(mockQueries)
 
         When("insertStory is called") {
-            val story = Story_history("1", "prompt", "genre", "story", 123L)
+            val story = Story_history(
+                id = "1",
+                prompt = "prompt",
+                genre = "genre",
+                story = "story",
+                language = "English",
+                is_offline = 0,
+                created_at = 123L
+            )
 
             Then("it should delegate to GolpoDatabaseQueries.insertStory") {
                 runTest {
@@ -27,7 +33,9 @@ class SqlDelightStoryDataStoreTest : BehaviorSpec({
                             prompt = story.prompt,
                             genre = story.genre,
                             story = story.story,
-                            created_at = story.created_at
+                            created_at = story.created_at,
+                            language = story.language,
+                            is_offline = story.is_offline
                         )
                     }
                 }

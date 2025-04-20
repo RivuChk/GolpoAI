@@ -22,7 +22,9 @@ class SqlDelightStoryDataStore(
             prompt = story.prompt,
             genre = story.genre,
             story = story.story,
-            created_at = story.created_at
+            created_at = story.created_at,
+            language = story.language,
+            is_offline = story.is_offline
         )
     }
 }

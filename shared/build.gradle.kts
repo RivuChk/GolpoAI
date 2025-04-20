@@ -16,6 +16,7 @@ sqldelight {
     databases {
         create("GolpoDatabase") {
             packageName.set("dev.rivu.golpoai.db")
+            version = 2
         }
     }
 }

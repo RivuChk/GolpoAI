@@ -1,0 +1,2 @@
+ALTER TABLE story_history ADD COLUMN language TEXT;
+ALTER TABLE story_history ADD COLUMN is_offline INTEGER;

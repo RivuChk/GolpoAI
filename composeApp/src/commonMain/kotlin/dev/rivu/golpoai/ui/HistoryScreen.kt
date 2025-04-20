@@ -56,11 +56,17 @@ object HistoryScreen : Screen {
                                 }
                         ) {
                             Column(modifier = Modifier.padding(12.dp)) {
-                                Text("Prompt: ${story.prompt}", style = MaterialTheme.typography.subtitle1)
-                                Text("Genre: ${story.genre}", style = MaterialTheme.typography.body2)
+                                Text(
+                                    "Prompt: ${story.story.storyMetadata.prompt}",
+                                    style = MaterialTheme.typography.subtitle1
+                                )
+                                Text(
+                                    "Genre: ${story.story.storyMetadata.genre}",
+                                    style = MaterialTheme.typography.body2
+                                )
                                 Spacer(modifier = Modifier.height(4.dp))
                                 Text(
-                                    story.story.take(200) + "...",
+                                    story.story.storyText.take(200) + "...",
                                     style = MaterialTheme.typography.body2
                                 )
                             }

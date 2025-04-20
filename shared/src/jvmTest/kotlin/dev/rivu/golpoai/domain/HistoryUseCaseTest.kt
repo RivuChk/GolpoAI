@@ -1,6 +1,8 @@
 package dev.rivu.golpoai.domain
 
 import dev.rivu.golpoai.data.models.SavedStory
+import dev.rivu.golpoai.data.models.Story
+import dev.rivu.golpoai.data.models.StoryMetadata
 import dev.rivu.golpoai.data.repositories.StoryHistoryRepository
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.collections.shouldContainExactly
@@ -15,7 +17,7 @@ class HistoryUseCaseTest : BehaviorSpec({
         val useCase = HistoryUseCase(mockRepository)
 
         When("getAllStories is called") {
-            val sampleList = listOf(SavedStory("1", "prompt", "genre", "story", 100L))
+            val sampleList = listOf(SavedStory("1", Story( storyMetadata = StoryMetadata("title", "prompt", "genre", "story", false, 100L), "story")))
             coEvery { mockRepository.getAllStories() } returns flowOf(sampleList)
 
             Then("it should return the same list from repository") {

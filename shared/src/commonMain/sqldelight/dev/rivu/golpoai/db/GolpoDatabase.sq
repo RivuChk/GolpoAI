@@ -3,6 +3,8 @@ CREATE TABLE story_history (
     prompt TEXT NOT NULL,
     genre TEXT NOT NULL,
     story TEXT NOT NULL,
+    language TEXT,
+    is_offline INTEGER,
     created_at INTEGER NOT NULL
 );
 
@@ -10,5 +12,5 @@ selectAll:
 SELECT * FROM story_history ORDER BY created_at DESC;
 
 insertStory:
-INSERT INTO story_history(id, prompt, genre, story, created_at)
-VALUES (?, ?, ?, ?, ?);
+INSERT INTO story_history(id, prompt, genre, story, language, is_offline, created_at)
+VALUES (?, ?, ?, ?, ?, ?, ?);

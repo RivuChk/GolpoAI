@@ -1,9 +1,9 @@
 package dev.rivu.golpoai.presentation
 
+import dev.rivu.golpoai.data.models.Story
+
 data class StoryUiState(
-    val prompt: String = "",
-    val genre: String = "",
-    val story: String? = null,
+    val story: Story? = null,
     val loading: Boolean = false,
     val error: String? = null,
     val saved: Boolean = false,
