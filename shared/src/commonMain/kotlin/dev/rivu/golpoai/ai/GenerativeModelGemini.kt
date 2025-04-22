@@ -18,16 +18,10 @@ class GenerativeModelGemini(private val apiKey: String) : GenerativeModel {
     override val isReady: StateFlow<Boolean> = MutableStateFlow(true).asStateFlow()
 
     override suspend fun generateStory(prompt: String, awaitReadiness: Boolean): Result<String> {
-        return try {
+        return runCatching {
             val input = content { text(prompt) }
             val response = model.generateContent(input)
-            Logger.d("Generated story: $response")
-            response.text?.let {
-                Result.success(it)
-            } ?: throw UnsupportedOperationException("No story generated.")
-        } catch (e: Exception) {
-            Logger.e("Error generating story", e)
-            Result.failure(e)
+            response.text ?: throw UnsupportedOperationException("No text returned from model")
         }
     }
 }

@@ -1,3 +1,4 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 import com.codingfeline.buildkonfig.compiler.FieldSpec.Type
 import org.gradle.declarative.dsl.schema.FqName.Empty.packageName
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
@@ -16,9 +17,9 @@ buildkonfig {
 
     defaultConfigs {
         buildConfigField(
-            Type.BOOLEAN,
-            "buildConfigWorking",
-            "true"
+            Type.STRING,
+            "modelUrl",
+            gradleLocalProperties(rootDir, providers).getProperty("modelUrl") ?: "MISSING_API_KEY"
         )
     }
 }

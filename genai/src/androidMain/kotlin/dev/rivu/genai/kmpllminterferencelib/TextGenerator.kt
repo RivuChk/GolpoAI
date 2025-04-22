@@ -23,6 +23,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import androidx.core.net.toUri
+import dev.rivu.genai.kmpllminterferencelib.config.BuildKonfig
 
 
 actual class TextGenerator(private val context: Context) {
@@ -31,7 +32,7 @@ actual class TextGenerator(private val context: Context) {
     val job = SupervisorJob()
     val coroutineScope = CoroutineScope(Dispatchers.IO + job)
 
-    private val modelUrl = "https://s3.us-east-2.amazonaws.com/rivu.dev/gemma3-1b-it-int4.task"
+    private val modelUrl = BuildKonfig.modelUrl
     private val modelFileName = "gemma3-1b-it-int4.task"
 
     val parentDir = context.getExternalFilesDir("models")
@@ -76,15 +77,18 @@ actual class TextGenerator(private val context: Context) {
 
             _isDownloaded.collect {
                 if (it) {
-                    _isReady.value = try {
+                    val isReady = runCatching {
                         llmInference.generateResponse("are you working yet?").isNotBlank()
-                    } catch (e: Exception) {
-                        Logger.e("Error initializing model", e)
-                        false
                     }
-                    Logger.d(
-                        "Model ready: ${_isReady.value}"
-                    )
+
+                    if (isReady.isSuccess && isReady.getOrNull() ?: false) {
+                        _isReady.value = true
+                        Logger.d(
+                            "Model ready: ${_isReady.value}"
+                        )
+                    } else {
+                        Logger.e("Error initializing model", isReady.exceptionOrNull() ?: Exception("Unknown error"))
+                    }
                 } else {
                     _isReady.value = false
                 }
