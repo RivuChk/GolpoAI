@@ -1,6 +1,7 @@
 package dev.rivu.golpoai.ai
 
 import dev.rivu.golpoai.logging.Logger
+import dev.shreyaspatil.ai.client.generativeai.type.GenerationConfig
 import dev.shreyaspatil.ai.client.generativeai.type.content
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -11,7 +12,11 @@ class GenerativeModelGemini(private val apiKey: String) : GenerativeModel {
     private val model by lazy {
         GeminiApiGenerativeModel(
             modelName = "gemini-2.0-flash",
-            apiKey = apiKey
+            apiKey = apiKey,
+            generationConfig = GenerationConfig.Builder().apply {
+                topK = 40
+            }
+                .build()
         )
     }
 

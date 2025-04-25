@@ -12,13 +12,11 @@ class LocalGenerativeModel(
 
 
     override suspend fun generateStory(prompt: String, awaitReadiness: Boolean): Result<String> {
-        return try {
+        return runCatching {
             if (!isReady.value && awaitReadiness) {
                 isReady.first { it }
             }
-            Result.success(textGenerator.generate(prompt))
-        } catch (e: Exception) {
-            Result.failure(e)
+            textGenerator.generate(prompt)
         }
     }
 
