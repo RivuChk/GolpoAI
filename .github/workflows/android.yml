@@ -1,0 +1,54 @@
+name: Test, Prepare Build and Upload
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+    inputs:
+      tags:
+          description: 'Test scenario tags'
+          required: false
+          type: boolean
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: gradle
+
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+    - name: Run Tests
+      run: ./gradlew test
+    - name: Build with Gradle
+      run: ./gradlew :composeApp:assembleDebug
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v4.6.2
+      with:
+        # Artifact name
+        name: GolpoAIApp.apk # optional, default is artifact
+        # A file, directory or wildcard pattern that describes what to upload
+        path: composeApp/build/outputs/apk/debug/composeApp-debug.apk
+        # The desired behavior if no files are found using the provided path.
+        if-no-files-found: warn # optional, default is warn
+        # Duration after which the artifact will expire in days. 0 means using the default retention.
+    
+        retention-days: 15 # optional
+        
+        # If true, an artifact with a matching name will be deleted before a new one is uploaded. If false, the action will fail if an artifact for the given name already exists. Does not fail if the artifact does not exist.
+    
+        overwrite: true # optional, default is false
+        
+        
+            
+          
