@@ -34,7 +34,7 @@ jobs:
         # A file, directory or wildcard pattern that describes what to upload
         path: composeApp/build/outputs/apk/debug/composeApp-debug.apk
         # The desired behavior if no files are found using the provided path.
-        if-no-files-found: warn# optional, default is warn
+        if-no-files-found: warn # optional, default is warn
         # Duration after which the artifact will expire in days. 0 means using the default retention.
     
         retention-days: 15 # optional
