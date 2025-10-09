@@ -15,7 +15,8 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import kotlinx.datetime.Clock
+import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
 
 class StoryScreenModel(
     private val useCase: StoryUseCase,
@@ -35,6 +36,7 @@ class StoryScreenModel(
 
     val isOfflineModelReady = useCase.isOfflineModelReady
 
+    @OptIn(ExperimentalTime::class)
     fun generateStory(prompt: String, genre: String, language: String) {
         mutableState.value = mutableState.value.copy(loading = true, error = null)
         val isOffline = useLocalGeneration.value

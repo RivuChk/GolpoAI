@@ -98,6 +98,9 @@ gen-external-apklibs
 # CMake
 cmake-build-*/
 
+.claude/
+.windsurfrules
+
 # Mongo Explorer plugin
 .idea/**/mongoSettings.xml
 

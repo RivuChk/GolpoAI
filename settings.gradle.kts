@@ -25,6 +25,8 @@ dependencyResolutionManagement {
                 includeGroupAndSubgroups("com.google")
             }
         }
+        // Required for Kotest dependencies
+        maven("https://repo1.maven.org/maven2/")
     }
 }
 

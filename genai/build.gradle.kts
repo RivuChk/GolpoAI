@@ -26,9 +26,7 @@ buildkonfig {
 
 kotlin {
     androidTarget {
-        compilations.all {
-            kotlinOptions.jvmTarget = JvmTarget.JVM_17.target
-        }
+        compilerOptions.jvmTarget.set(JvmTarget.JVM_17)
 
     }
 

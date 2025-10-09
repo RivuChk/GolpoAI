@@ -30,6 +30,16 @@ buildkonfig {
             "GEMINI_API_KEY",
             gradleLocalProperties(rootDir, providers).getProperty("GEMINI_API_KEY") ?: "MISSING_API_KEY"
         )
+        buildConfigField(
+            Type.STRING,
+            "REPLICATE_API_KEY",
+            gradleLocalProperties(rootDir, providers).getProperty("REPLICATE_API_KEY") ?: "MISSING_API_KEY"
+        )
+        buildConfigField(
+            Type.STRING,
+            "OPENAI_API_KEY",
+            gradleLocalProperties(rootDir, providers).getProperty("OPENAI_API_KEY") ?: "MISSING_API_KEY"
+        )
     }
 }
 
