@@ -68,6 +68,12 @@ kotlin {
             implementation(libs.sqldelight.coroutines.extensions)
 
             implementation(libs.kotlinx.coroutines.core)
+            
+            // Ktor client for Ollama API
+            implementation(libs.ktor.client.core)
+            implementation(libs.ktor.client.content.negotiation)
+            implementation(libs.ktor.client.json)
+            implementation(libs.ktor.client.logging)
         }
 
         val commonTest by getting {
@@ -94,11 +100,16 @@ kotlin {
         androidMain.dependencies {
             implementation(libs.koin.android) // use latest stable
             implementation(libs.sqldelight.android.driver)
-
+            implementation(libs.ktor.client.android)
         }
 
         iosMain.dependencies {
             implementation(libs.sqldelight.native.driver)
+            implementation(libs.ktor.client.darwin)
+        }
+        
+        jvmMain.dependencies {
+            implementation(libs.ktor.client.jvm)
         }
 
     }

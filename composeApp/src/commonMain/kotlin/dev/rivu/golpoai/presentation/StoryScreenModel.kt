@@ -11,6 +11,7 @@ import dev.rivu.golpoai.logging.Logger
 import dev.rivu.golpoai.platform.PlatformUtility
 import dev.rivu.golpoai.platform.generateUUID
 import dev.rivu.golpoai.preferences.LocalGenerationSettings
+import dev.rivu.golpoai.ai.GenerationType
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
@@ -28,9 +29,29 @@ class StoryScreenModel(
         .useLocalGenerationFlow
         .stateIn(screenModelScope, SharingStarted.Eagerly, localGenerationSettings.useLocalGeneration)
 
+    val generationType: StateFlow<GenerationType> = localGenerationSettings
+        .generationTypeFlow
+        .stateIn(screenModelScope, SharingStarted.Eagerly, localGenerationSettings.generationType)
+
+    val ollamaBaseUrl: StateFlow<String> = localGenerationSettings
+        .ollamaBaseUrlFlow
+        .stateIn(screenModelScope, SharingStarted.Eagerly, localGenerationSettings.ollamaBaseUrl)
+
     fun setUseLocalGeneration(enabled: Boolean) {
         screenModelScope.launch {
             localGenerationSettings.useLocalGeneration = enabled
+        }
+    }
+
+    fun setGenerationType(type: GenerationType) {
+        screenModelScope.launch {
+            localGenerationSettings.generationType = type
+        }
+    }
+
+    fun setOllamaBaseUrl(url: String) {
+        screenModelScope.launch {
+            localGenerationSettings.ollamaBaseUrl = url
         }
     }
 
@@ -39,14 +60,16 @@ class StoryScreenModel(
     @OptIn(ExperimentalTime::class)
     fun generateStory(prompt: String, genre: String, language: String) {
         mutableState.value = mutableState.value.copy(loading = true, error = null)
-        val isOffline = useLocalGeneration.value
+        val currentGenerationType = generationType.value
+        val currentOllamaUrl = ollamaBaseUrl.value
         screenModelScope.launch {
             try {
                 val story = useCase.generateStory(
                     prompt = prompt,
                     genre = genre,
                     language = language,
-                    offline = isOffline
+                    generationType = currentGenerationType,
+                    ollamaBaseUrl = currentOllamaUrl
                 )
                 mutableState.value = if (story.isSuccess) {
                     mutableState.value.copy(
@@ -60,7 +83,7 @@ class StoryScreenModel(
                                 prompt = prompt,
                                 genre = genre,
                                 language = language,
-                                isOffline = isOffline,
+                                isOffline = currentGenerationType == GenerationType.LOCAL,
                                 createdAt = Clock.System.now().toEpochMilliseconds(),
                             ),
                         ),

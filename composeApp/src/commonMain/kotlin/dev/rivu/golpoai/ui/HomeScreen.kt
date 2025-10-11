@@ -33,8 +33,8 @@ import dev.rivu.golpoai.ui.components.GolpoAIHeaderLogo
 import dev.rivu.golpoai.ui.components.GolpoButton
 import dev.rivu.golpoai.ui.components.GolpoDropdownMenu
 import dev.rivu.golpoai.ui.components.GolpoTextField
-import dev.rivu.golpoai.ui.components.LocalGenerationToggle
-import dev.rivu.golpoai.ui.theme.KotlinRed
+import dev.rivu.golpoai.ui.components.GenerationModeDropdown
+import dev.rivu.golpoai.ui.components.OllamaUrlInput
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 object HomeScreen : Screen {
@@ -44,8 +44,11 @@ object HomeScreen : Screen {
         var genre by rememberSaveable { mutableStateOf("Sci-fi") }
         val navigator = LocalNavigator.currentOrThrow
         val screenModel = koinScreenModel<StoryScreenModel>()
-        val useLocal = screenModel.useLocalGeneration.collectAsState()
         val isOfflineModelReady = screenModel.isOfflineModelReady.collectAsState()
+        
+        // For now, use a local state for the generation type until we fix the module dependency
+        var selectedGenerationType by rememberSaveable { mutableStateOf(dev.rivu.golpoai.ui.GenerationType.ONLINE_GEMINI) }
+        var ollamaUrl by rememberSaveable { mutableStateOf("http://localhost:11434") }
 
 
         Column(
@@ -74,21 +77,29 @@ object HomeScreen : Screen {
 
             Spacer(Modifier.height(16.dp))
 
-            if (getPlatform().platform == PlatformEnum.Android) {
-                LocalGenerationToggle(isEnabled = useLocal.value, isReady = isOfflineModelReady.value) {
-                    screenModel.setUseLocalGeneration(it)
+            // Generation Mode Selection - Always visible
+            GenerationModeDropdown(
+                selectedType = selectedGenerationType,
+                isLocalModelReady = isOfflineModelReady.value,
+                onTypeSelected = { type ->
+                    selectedGenerationType = type
                 }
+            )
 
-                if (!isOfflineModelReady.value) {
-                    Text(
-                        "⏳ Offline model is not ready yet. We can generate online",
-                        style = MaterialTheme.typography.caption,
-                        color = KotlinRed
-                    )
-                }
+            Spacer(Modifier.height(16.dp))
 
-                Spacer(Modifier.height(32.dp))
+            // Show URL input only when Ollama is selected
+            if (selectedGenerationType == dev.rivu.golpoai.ui.GenerationType.OLLAMA) {
+                OllamaUrlInput(
+                    url = ollamaUrl,
+                    onUrlChange = { url ->
+                        ollamaUrl = url
+                    }
+                )
+                Spacer(Modifier.height(16.dp))
             }
+
+            Spacer(Modifier.height(16.dp))
 
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -97,7 +108,12 @@ object HomeScreen : Screen {
                 GolpoButton(
                     text = "Generate Story",
                     modifier = Modifier.align(Alignment.CenterVertically),
-                    enabled = prompt.isNotBlank() && (isOfflineModelReady.value || !useLocal.value)
+                    enabled = prompt.isNotBlank() && when (selectedGenerationType) {
+                        GenerationType.LOCAL -> isOfflineModelReady.value
+                        GenerationType.OLLAMA -> ollamaUrl.isNotBlank()
+                        GenerationType.ONLINE_GEMINI -> true
+                        else -> true
+                    }
                 ) {
                     navigator.push(StoryScreen(prompt, genre))
                 }
