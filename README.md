@@ -24,7 +24,7 @@ https://github.com/user-attachments/assets/fe5fda62-6d3a-4ca0-b311-68c9b113eaa7
 
 https://github.com/user-attachments/assets/a25c19e1-2329-45c2-95d6-2b8611f0d8db
 
-
+https://github.com/RivuChk/GolpoAI/blob/main/demo.mp4
 
 
 
