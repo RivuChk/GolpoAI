@@ -25,6 +25,6 @@ https://github.com/user-attachments/assets/fe5fda62-6d3a-4ca0-b311-68c9b113eaa7
 https://github.com/user-attachments/assets/a25c19e1-2329-45c2-95d6-2b8611f0d8db
 
 
+### Contributor
 
-
-
+A special thanks to **[Mayur Madnani](https://www.linkedin.com/in/mayurmadnani/)** for enhancing the application by fine-tuning a model. You can find his contributions at [MicroFables](https://github.com/mayurmadnani/MicroFables).
