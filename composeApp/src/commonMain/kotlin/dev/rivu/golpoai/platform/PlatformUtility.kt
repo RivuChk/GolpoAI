@@ -7,7 +7,7 @@ object PlatformUtility {
 
 }
 
-expect fun PlatformUtility.shareStory(contextWrapper: ContextWrapper, story: String)
+expect fun PlatformUtility.shareStory(contextWrapper: ContextWrapper, story: String, imageUri: String? = null)
 
 expect fun PlatformUtility.generateUUID(): String
 
